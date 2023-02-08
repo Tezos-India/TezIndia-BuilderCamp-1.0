@@ -1,0 +1,1911 @@
+<html>
+            <head>
+                <style>/* Copyright 2019-2022 Smart Chain Arena LLC. */
+
+:root {
+  --primary: #006dcc;
+  --primary-text-color: #212529;
+
+  --background-color: #fafafa;
+  --link-color: #01608c;
+  --button-hover-color: #e8e8e8;
+  --menu-bg-color: #f1f1f1;
+  --border-color: #d3d3d3;
+
+  --output-bgok: #f1f1fa;
+  --output-bgko: #faf1f1;
+
+  --danger-color: #dc3545;
+  --dataColumn-color: #290075;
+  --simulationBuilder-bg-color: #fffdeb;
+  --tabcontentshow-bg-color: #ccffcc;
+
+  --key-address-color: #006600;
+  --timestamp-color: #6600aa;
+  --code-type-color: #331188;
+  --code-variable-color: #aa0000;
+  --code-store-color: #0000aa;
+  --code-constant-color: #000088;
+  --code-cons-color: #0000aa;
+  --code-comment-color: #006600;
+
+  --button-bg-color: #006dcc;
+  --button-font-color: #FFF;
+
+  /* Wallet colors */
+  --applied-op-color: #e8ffc2;
+  --failed-op-color: #ffcfbf;
+}
+
+button.editor-menu-btn:not([disabled]):hover {
+  color: var(--primary-text-color);
+  background-color: var(--background-color);
+}
+
+button.editor-menu-btn:disabled,
+button.editor-menu-btn:disabled:hover {
+  opacity: 0.5;
+  cursor: default;
+  background-color: initial;
+  text-decoration: none;
+}
+
+#outputPanel.empty-output {
+  background: rgba(255, 255, 255, 0.9) url(../smartPY.only.transp.png) center/40% no-repeat;
+  background-blend-mode: color;
+}
+
+#logo-image {
+  background: url(../smartPY_horizon.transp.png) left/75% no-repeat;
+}
+
+#editor-link {
+  background-image: url(../svgs/terminal.svg);
+}
+
+#wallet-link {
+  background-image: url(../svgs/wallet-dark.svg);
+}
+
+#faucet-link {
+  background-image: url(../svgs/faucet.svg);
+}
+
+#explorer-link {
+  background-image: url(../svgs/search.svg);
+}
+
+#node_explorer-link {
+  background-image: url(../svgs/search.svg);
+}
+
+#michelson-link {
+  background-image: url(../svgs/stream.svg);
+}
+
+#help-link {
+  background-image: url(../svgs/question.svg);
+}
+
+#origination-link {
+  background-image: url(../svgs/stream.svg);
+}
+
+#ledger-img {
+  background-image: url(../svgs/ledger-dark.svg);
+  background-repeat: no-repeat;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #006dcc;
+    --primary-text-color: #fafafa;
+
+    --background-color: #212529;
+    --link-color: #66aacc;
+    --button-hover-color: slategray;
+    --menu-bg-color: #05385c;
+    --border-color: #d3d3d3;
+
+    --output-bgok: #05364a;
+    --output-bgko: #4a3605;
+
+    --danger-color: #dc3545;
+    --dataColumn-color: blanchedalmond;
+    --simulationBuilder-bg-color: #444488;
+    --tabcontentshow-bg-color: darkgreen;
+
+    --key-address-color: chocolate;
+    --timestamp-color: aqua;
+    --code-type-color: magenta;
+    --code-variable-color: khaki;
+    --code-store-color: greenyellow;
+    --code-constant-color: red;
+    --code-cons-color: hotpink;
+    --code-comment-color: chocolate;
+
+    --button-bg-color: #FFF;
+    --button-font-color: #000;
+  }
+
+  button.editor-menu-btn:not([disabled]):hover {
+    color: var(--background-color);
+    background-color: #e8e8e8;
+  }
+
+  .right-submenu button,
+  .pretty-submenu button {
+    background-color: var(--primary-text-color);
+  }
+
+  #outputPanel.empty-output {
+    background: rgba(30, 30, 30, 0.8) url(../logo-transp.png) center/40% no-repeat;
+    background-blend-mode: color;
+  }
+
+  #logo-image {
+    background: url(../dm-logo.png) left/75% no-repeat;
+  }
+
+  .modal-content {
+    background-color: var(--menu-bg-color);
+  }
+
+  /** Dark mode header icons*/
+  #editor-link {
+    background-image: url(../svgs/dm-terminal.svg);
+  }
+
+  #wallet-link {
+    background-image: url(../svgs/wallet-dark.svg);
+  }
+
+  #faucet-link {
+    background-image: url(../svgs/dm-faucet.svg);
+  }
+
+  #explorer-link {
+    background-image: url(../svgs/dm-search.svg);
+  }
+
+  #node_explorer-link {
+    background-image: url(../svgs/dm-search.svg);
+  }
+
+  #michelson-link {
+    background-image: url(../svgs/dm-stream.svg);
+  }
+
+  #help-link {
+    background-image: url(../svgs/dm-question.svg);
+  }
+
+  #origination-link {
+    background-image: url(../svgs/dm-stream.svg);
+  }
+}
+
+body,
+html {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  color: var(--primary-text-color);
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+main {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 20px 1fr;
+  grid-template-rows: max-content max-content minmax(1px, 1fr);
+  grid-template-areas:
+    'menu menu menu'
+    'submenu submenu submenu'
+    'editorDiv centerCol outputPanel';
+}
+
+button {
+  border-radius: 3px;
+  background-color: inherit;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+  color: inherit;
+}
+
+button[onclick]:hover,
+button[data-toggle]:hover {
+  cursor: pointer;
+  background-color: var(--button-hover-color);
+}
+
+button.text-button {
+  border: none;
+  background-color: inherit;
+  color: var(--link-color);
+  text-align: left;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+button.text-button:hover {
+  text-decoration: underline;
+  box-shadow: none;
+  font-weight: bold;
+}
+
+button.text-button:active,
+button.text-button:focus {
+  outline: none;
+  font-weight: bold;
+}
+
+/** Main Nav **/
+header {
+  position: fixed;
+  width: 100%;
+  background-color: var(--background-color);
+  top: 0;
+  z-index: 99999999999;
+}
+
+header .navbar-toggler {
+  background-color: #fafafa; /** Note: same color in both light and dark mode */
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--menu-bg-color);
+}
+
+.logo {
+  margin: 0.6em;
+}
+
+.logo img,
+.logo div {
+  height: 42px;
+}
+
+.logo a:hover {
+  background-color: inherit !important;
+}
+
+.logo p {
+  margin: -10px 0 0 40px;
+  font-variant: small-caps;
+  font-family: Verdana, sans-serif;
+}
+
+#mainNav .container {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+#mainNav .row {
+  margin: 0 0 3px 0;
+}
+
+.nav-icon {
+  height: 14px !important;
+}
+
+.nav-item {
+  margin: 0 2px;
+}
+
+.nav-link {
+  padding: 0.25rem 1rem;
+}
+
+.nav-link {
+  color: inherit !important;
+  opacity: 0.5;
+}
+
+.active {
+  border-bottom: 2px solid var(--primary-text-color);
+  opacity: 1;
+}
+
+.nav-link > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nav-link span {
+  padding-right: 0.33rem;
+}
+
+.nav-icon {
+  height: 14px;
+  width: 14px;
+  display: inline-flex;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 14px;
+}
+
+/** End Main nav **/
+
+/** Editor menus **/
+
+.editor-nav {
+  padding: 3px;
+}
+
+.editor-nav .dropdown {
+  margin: 0 2px;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--primary);
+}
+
+.dropdown-menu li {
+  margin-bottom: 0;
+}
+
+button.editor-menu-btn {
+  border: none;
+  min-width: 4.1rem;
+  color: inherit;
+}
+
+button.editor-menu-btn:hover {
+  text-decoration: underline;
+}
+
+.submenu {
+  grid-area: submenu;
+  border: 1px solid var(--border-color);
+  background-color: var(--menu-bg-color);
+  padding: 2px 3px 3px 3px;
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.editor-nav > button {
+  margin: 0px 2px;
+}
+
+.with-key-commands {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spacer {
+  width: 8rem;
+}
+
+.right-submenu button,
+.pretty-submenu button {
+  margin: 0px 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.right-submenu,
+.pretty-submenu {
+  display: inline-flex;
+  margin: 0 3px;
+}
+
+.right-submenu {
+  padding-left: 0rem;
+}
+
+.pretty-submenu button span {
+  margin-left: 0.25rem;
+}
+
+#dynamicButtons > button {
+  padding-bottom: 4px;
+}
+/** End Editor Menu **/
+
+/** Editor layout **/
+main,
+#help,
+#explorer,
+#node_explorer,
+#faucet,
+#origination,
+#faq,
+#wallet {
+  padding-top: 76px;
+}
+
+main.layout-side-by-side {
+  grid-template-columns: 1fr 20px 1fr;
+}
+
+main.layout-output-only {
+  grid-template-columns: 0 0 1fr;
+}
+
+main.layout-editor-only {
+  grid-template-columns: 1fr 0 0;
+}
+
+main.layout-stacked {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+main.layout-side-by-side #outputPanel,
+main.layout-output-only #outputPanel {
+  display: block;
+}
+
+main.layout-editor-only #outputPanel {
+  display: none;
+}
+
+main.layout-stacked #outputPanel,
+main.layout-stacked #editorDiv {
+  height: 50%;
+  display: block;
+}
+
+/** End Editor layout **/
+
+#editorDiv {
+  grid-area: editorDiv;
+  display: inline-block;
+}
+
+#centerCol {
+  grid-area: centerCol;
+  display: inline-block;
+  background-color: var(--menu-bg-color);
+  margin: 5px;
+  padding: 0;
+}
+
+#outputPanel {
+  grid-area: outputPanel;
+  overflow: scroll;
+  margin: 0px;
+  padding: 5px;
+  background-size: 40%;
+  background-blend-mode: color;
+}
+
+#outputPanel.empty-output span {
+  opacity: 0.5;
+}
+
+.operation {
+  padding: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#outputPanel .contract {
+  padding: 0.5rem;
+}
+
+#outputPanel .execMessage {
+  padding: 0.5rem;
+}
+
+#outputPanel .contract,
+#outputPanel .execMessage {
+  overflow-x: auto;
+}
+
+.menu {
+  grid-area: menu;
+  overflow: hidden;
+  border: none;
+  background-color: var(--menu-bg-color);
+  padding: 10px 10px;
+  margin: 0px;
+}
+
+.menu a {
+  padding: 1px 10px;
+}
+
+#help,
+#explorer,
+#node_explorer,
+#faucet,
+#origination,
+#faq,
+#wallet {
+  margin: 1rem 2rem;
+}
+
+/** Overwrite bootstrap modal lg max width **/
+.modal-lg {
+  max-width: 900px;
+}
+
+/** Overwrite bootstrap .close button color to work in dark mode **/
+.close {
+  color: var(--primary-text-color);
+}
+
+.selection{
+    margin-left: 0px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    height: 30px;
+    min-width: 100px;
+}
+
+.radio_selection{
+    margin: 2px;
+    height: 12px;
+    width: 20px;
+}
+
+div.hidden {
+  display: none;
+}
+
+div#terms {
+  width: 80%;
+  max-height: 60%;
+}
+
+div.on {
+  margin-left: 20px;
+  white-space: nowrap;
+}
+
+td.data {
+  margin-left: 20px;
+  padding-left: 20px;
+}
+
+input {
+    width: 200px;
+    height: 30px;
+    font-size: 12px;
+    margin: 2px;
+}
+
+.no-margin-list li {
+  margin: 0;
+}
+
+td.dataColumn {
+  margin-left: 20px;
+  padding-left: 20px;
+  color: var(--dataColumn-color);
+}
+
+div.simulationBuilder {
+  border: 2px solid var(--border-color);
+  padding-left: 5px;
+  margin-bottom: 20px;
+}
+
+.steps {
+  border: 2px solid var(--border-color);
+  margin-left: 10px;
+  margin-bottom: 10px;
+  padding: 2px;
+}
+
+#outputPanel > div {
+  border: 1px solid var(--border-color);
+}
+
+.contract,
+.execMessageOK {
+  background-color: var(--output-bgok);
+}
+
+.execMessageKO {
+  background-color: var(--output-bgko);
+}
+
+/* div.python {
+    border-left: 3px solid #aaaaaa;
+    background-color: #ffeeee;
+}
+*/
+
+/* .michelson {
+    background-color: var(--output-bg);
+} */
+
+pre {
+  color: inherit;
+}
+
+input.smallCheck {
+  margin: 0px;
+  padding: 0px;
+  width: 15px;
+}
+
+textarea.smallMultilineArea {
+  width: 100%;
+  height: 400px;
+  font-size: 15px;
+  font-family: monospace;
+}
+
+#shareLink,
+#loadLink {
+  width: 100%;
+  height: 300px;
+  resize: vertical;
+  font-size: 15px;
+  font-family: monospace;
+}
+
+.resize_both {
+    resize: both;
+}
+
+div.michelsonLine {
+  padding-left: 2em;
+  text-indent: -2em;
+}
+
+.white-space-pre,
+.white-space-pre-wrap {
+  font-family: monospace;
+  white-space: pre;
+  overflow-x: scroll;
+}
+
+.white-space-pre-wrap {
+  white-space: pre-wrap;
+}
+
+div.message {
+  border-left: 1px solid var(--border-color);
+  background-color: #fafad2;
+}
+/* div.messageBox {
+    float : left;
+    background-color: #dddddd;
+    padding : 3px;
+    margin-right:5px;
+} */
+
+/* div.event {
+    border-left: 1px solid #aaaaaa;
+    background-color: #f6e1ff;
+} */
+/* div.eventBox {
+    float : left;
+    background-color: #dddddd;
+    padding : 3px;
+    margin-right:5px;
+} */
+
+/* div.scenario {
+    background-color: #fdd598;
+    padding-left : 30px;
+    margin-right:15px;
+} */
+
+/* div.scenario1 {
+    background-color: #fdd598;
+    padding-left : 10px;
+    margin-right:15px;
+    border-left: 2px solid #444444;
+    margin-left: 10px;
+}
+
+div.scenario2 {
+    background-color: #d5fd98;
+    padding-left : 10px;
+    margin-right:15px;
+    border-left: 2px solid #444444;
+    margin-left: 10px;
+}
+
+div.scenario3 {
+    background-color: #fd98d5;
+    padding-left : 10px;
+    margin-right:15px;
+    border-left: 2px solid #444444;
+    margin-left: 10px;
+} */
+
+div.error {
+  border-left: 1px solid #aaaaaa;
+  background-color: var(--output-bgko);
+}
+
+div.effect {
+    border: 1px solid #cccccc;
+    padding : 3px;
+}
+
+div.effectBox {
+  float: left;
+  background-color: #dddddd;
+  padding: 3px;
+}
+
+div.transition {
+  border-left: 3px solid #cccccc;
+  background-color: #eeeeee;
+  padding: 5px;
+}
+
+div.reset {
+  clear: both;
+}
+
+div.subtype {
+    margin-left: 1px;
+    padding: 5px;
+    border: 1px solid #eeeeee;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+div.indent5 {
+  padding-left: 0ex;
+}
+
+a {
+  color: var(--link-color);
+  background-color: inherit;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 0px;
+}
+
+a[href]:hover {
+  background-color: var(--button-hover-color);
+  color: var(--primary-text-color);
+}
+
+a.active {
+  font-weight: bold;
+}
+
+a:not([href]):not([tabindex]):focus,
+a:not([href]):not([tabindex]):hover {
+  cursor: default;
+}
+
+/* Mozilla-specific padding fix */
+@-moz-document url-prefix() {
+  .submenu {
+    padding-top: 3px;
+    margin-bottom: 1px;
+  }
+}
+
+.execMessageAlice {
+  margin-right: 10%;
+}
+
+.execMessageBob {
+  margin-left: 10%;
+}
+
+.form-header {
+  border: 1px solid var(--border-color);
+  background-color: var(--menu-bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 20px;
+  font-family: monospace;
+  border-radius: 0.3rem 0.3rem 0 0;
+  padding: 0.3rem;
+}
+
+.form-body {
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  font-family: monospace;
+  padding: 0 0.3rem 0.3rem 0.3rem;
+  margin-block-end: 0;
+}
+
+.form-error {
+  border: 1px solid var(--border-color);
+  background-color: var(--danger-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 10px;
+  font-family: monospace;
+  border-radius: 0 0 0.3rem 0.3rem;
+  padding: 0.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.form-footer {
+  border: 1px solid var(--border-color);
+  background-color: var(--menu-bg-color);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 20px;
+  font-family: monospace;
+  border-radius: 0 0 0.3rem 0.3rem;
+  padding: 0.3rem;
+  padding-right: 50px;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background-color: var(--menu-bg-color);
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab .title {
+  float: left;
+  padding: 10px;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 7px 10px;
+  transition: 0.3s;
+  opacity: 0.6;
+  margin: 3px;
+}
+
+button.button {
+  background-color: var(--button-bg-color);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: 0.3s;
+  opacity: 0.7;
+  color: var(--button-font-color);
+  margin: 2px;
+}
+
+button.button:hover {
+  background-color: var(--button-bg-color);
+  opacity: 1;
+}
+
+.tab button:hover,
+.tab button.active {
+  background-color: var(--button-hover-color);
+  opacity: 1;
+}
+
+/* Style the tab content */
+.tabs {
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+}
+.tabcontentalways {
+  padding: 6px 12px;
+  border-top: none;
+}
+.tabcontent {
+  padding: 6px 12px;
+  border-top: none;
+}
+.tabcontentshow {
+  background-color: tabcontenshow-bg-color;
+  display: block;
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
+  border-top: none;
+}
+
+.explorer_button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.node_explorer_button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.explorer_button,
+.node_explorer_button,
+.centertextbutton
+{
+  text-decoration: none;
+  color: var(--link-color);
+  background-color: inherit;
+  border: 1px solid var(--link-color);
+  margin-right: 5px;
+  margin-left: 5px;
+  border-radius: 5px;
+  line-height: 1.1rem;
+  height: 30px;
+  vertical-align: middle;
+}
+
+.extramarginbottom {
+  margin-bottom: 5px;
+}
+
+.centertextbutton[onclick]:hover {
+  background-color: #f1f1f1; /** intentionally always the same color */
+  cursor: pointer;
+}
+
+.centertextbutton:not([onclick]):hover {
+  cursor: default;
+}
+input[type='checkbox']:hover {
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+    margin-top: 2px;
+    height: 20px;
+    width: 20px;
+}
+
+input[type="text"] {
+    margin: 2px;
+}
+
+#storageDiv {
+}
+
+#storageDivInternal {
+  overflow: auto;
+  max-height: 500px;
+  padding-bottom:10px;
+}
+
+#storageAddressesDiv {
+  overflow: auto;
+  max-height: 400px;
+}
+
+.recordList {
+    border-collapse: collapse;
+    margin: 2px;
+}
+
+.recordList th {
+  color: #880000;
+  border-collapse: collapse;
+}
+
+.recordList td {
+    padding: 1px;
+    border: 1px solid var(--primary-text-color);
+    border-style: solid;
+    vertical-align: top;
+    padding: 5px;
+}
+
+.bytes {
+  margin: 2px;
+  max-width: 120px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--code-store-color);
+  text-overflow: ellipsis;
+  font-family: monospace;
+}
+
+.key {
+  margin: 2px;
+  width: 120px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--key-address-color);
+  text-overflow: ellipsis;
+  font-family: monospace;
+}
+
+.signature {
+  margin: 2px;
+  width: 120px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #44aaaa;
+  text-overflow: ellipsis;
+  font-family: monospace;
+}
+
+.address {
+  margin: 2px;
+  width: 120px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--key-address-color);
+  text-overflow: ellipsis;
+  font-family: monospace;
+}
+
+.timestamp {
+  margin: 2px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--timestamp-color);
+  text-overflow: ellipsis;
+  font-family: monospace;
+}
+
+.mutez {
+  margin: 2px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #66aa00;
+  text-overflow: ellipsis;
+  font-family: monospace;
+}
+
+#contractId {
+  width: 300px;
+  font-family: monospace;
+}
+
+#accountId {
+  width: 300px;
+  font-family: monospace;
+}
+
+#providerId {
+  width: 300px;
+  font-family: monospace;
+}
+
+.preview {
+  min-height: 100px;
+  overflow: scroll;
+  border: 1px solid black;
+  font-family: monospace;
+  border-radius: 0.3rem;
+  padding: 0.3rem;
+}
+
+.protocolBox {
+  border: 1px solid #ccc;
+  padding: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border-radius: 5px;
+}
+
+.input-error {
+  color: var(--danger-color);
+  text-align: center;
+}
+
+.load-contract {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2px;
+}
+
+.load-contract button {
+  margin: 0.3rem 0;
+  padding: 0.3rem 0.5rem;
+  align-self: flex-start;
+}
+
+@media (max-width: 568px) {
+  #help,
+  #explorer,
+  #node_explorer,
+  #faucet,
+  #origination,
+  #faq,
+  #wallet {
+    margin: 1rem 0.5rem;
+  }
+  .right-submenu {
+    padding-left: 0.5rem;
+    border-left: none;
+  }
+  .spacer {
+    width: 5rem;
+  }
+}
+
+span.fieldName {
+  display: inline-block;
+  color: #444488;
+  min-width: 100px;
+}
+
+/**
+    * Code Highlighting
+    **/
+span.channel {
+  color: #8888ff;
+}
+
+span.type {
+  color: var(--code-type-color);
+}
+
+span.partialType {
+  color: #ff4444;
+}
+
+span.variable {
+  color: var(--code-variable-color);
+}
+
+span.store {
+  color: var(--code-store-color);
+}
+
+span.param {
+  color: #888800;
+}
+
+span.variable {
+  color: #008800;
+}
+
+span.keyword {
+  color: #bb4488;
+}
+
+span.conditions {
+  color: #55aa55;
+}
+
+span.constant {
+  color: var(--code-constant-color);
+}
+
+span.cons {
+  color: #0000aa;
+}
+
+span.record {
+  color: #4288aa;
+}
+
+span.conditions span {
+  color: #55aa55;
+}
+
+span.gas {
+  color: orange;
+}
+
+span.analysis {
+  color: orange;
+}
+
+span.self {
+  color: #0099aa;
+}
+
+span.comment {
+  color: var(--code-comment-color);
+}
+
+span.stack {
+  color: #0088aa;
+}
+
+span.ctt {
+  color: lightblue;
+}
+
+code,
+span.command {
+  background-color: hsla(0, 0%, 0%, 0.04);
+  color: #444488;
+}
+
+/* Ledger */
+.ledger-icon {
+  height: 20px;
+  margin-top: 5px;
+  background-repeat: no-repeat;
+}
+
+/* Wallet Styles */
+.applied-op-bg {
+  background-color: var(--applied-op-color);
+}
+
+.failed-op-bg {
+  background-color: var(--failed-op-color);
+}
+
+.inputSection {
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+  align-items: center;
+  width: 300px;
+}
+
+select {
+  font-size: 16px;
+  font-family: sans-serif;
+  color: #444;
+  line-height: 1.3;
+  padding: .3em 2em .2em .8em;
+  box-sizing: border-box;
+  margin: 5px;
+  border: 1px solid #aaa;
+  box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+  border-radius: .5em;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'), linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+  background-repeat: no-repeat, repeat;
+  /* arrow icon position (1em from the right, 50% vertical) , then gradient position*/
+  background-position: right .7em top 50%, 0 0;
+  /* icon size, then gradient */
+  background-size: .65em auto, 100%;
+}
+.select::-ms-expand {
+  display: none;
+}
+.select:hover {
+  border-color: #888;
+}
+.select:focus {
+  border-color: #aaa;
+  box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  color: #222;
+  outline: none;
+}
+.select option {
+  font-weight:normal;
+}
+.select:disabled:hover, select[aria-disabled=true] {
+  border-color: #aaa;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+/* Beacon & Temple Styles */
+.flexRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
+  background-color: var(--button-hover-color);
+  padding: 10px;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/lato/v16/S6uyw4BMUTPHjxAwXiWtFCfQ7A.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/lato/v16/S6u9w4BMUTPHh6UVSwaPGQ3q5d0N7w.woff2)
+    format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/lato/v16/S6uyw4BMUTPHjx4wXiWtFCc.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F,
+    U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/lato/v16/S6u9w4BMUTPHh6UVSwiPGQ3q5d0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F,
+    U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+html,
+body {
+  font-size: 16px;
+  font-family: Lato, sans-serif;
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+li {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  /* color: hsla(0, 0%, 0%, 0.8); */
+  font-family: Lato, sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 2.415rem;
+}
+
+h2 {
+  font-size: 1.51572rem;
+  line-height: 2.415rem;
+}
+
+h3 {
+  font-size: 1.31951rem;
+  line-height: 1.61rem;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+td.pad10 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+td.code_right {
+  text-align: right;
+  font-family: monospace;
+}
+
+code,
+span.command {
+  font-size: 0.88rem;
+  line-height: 1.61rem;
+
+  border-radius: 3px;
+  font-family: monospace;
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.page-title {
+  text-align: center;
+  margin: 1rem 0 2.5rem 0;
+}
+
+/**
+  * Output Typography
+  **/
+#outputPanel .execMessage *,
+#outputPanel .tabcontent *,
+#types {
+  font-size: 0.9375rem;
+  line-height: 1.1em;
+}
+
+#outputPanel .execMessage h1,
+#outputPanel .tabcontent h1 {
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+#outputPanel .execMessage h2,
+#outputPanel .tabcontent h2 {
+  font-size: 1.3rem;
+  font-weight: normal;
+  margin-bottom: 0.2em;
+}
+
+#outputPanel .execMessage h3,
+#outputPanel .tabcontent h3 {
+  font-size: 1.1rem;
+  font-weight: normal;
+  margin-bottom: 0.2em;
+}
+
+#outputPanel .execMessage h4,
+#outputPanel .tabcontent h4 {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-bottom: 0.2em;
+}
+
+#types .type,
+#outputPanel .type,
+.python,
+#outputPanel .python,
+.michelson,
+#outputPanel .michelson,
+#outputPanel .on {
+  font-family: monospace;
+  font-size: 0.9375rem;
+}
+
+.dataColumn,
+.code {
+  font-family: monospace;
+}
+</style>
+                <script>// Copyright 2019-2022 Smart Chain Arena LLC.
+
+function copyMichelson(x) {
+    var range = document.createRange();
+    var children = x.parentNode.parentNode.childNodes;
+    children.forEach(function (child) {
+        if (child.nodeType != Node.TEXT_NODE) {
+            if (child.className.includes('michelson')) {
+                range.selectNode(child);
+                console.log(child);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+            }
+        }
+    });
+}
+
+function copyMichelsonTextArea(x) {
+    document.getElementById(x).select();
+    document.execCommand('copy');
+}
+
+function openTabLazy(evt, id, global_id) {
+    var i, tabcontent, tablinks;
+
+    tabcontent = evt.currentTarget.parentNode.parentNode.childNodes;
+    for (i = 0; i < tabcontent.length; i++) {
+        if (tabcontent[i].className == 'tabcontent') tabcontent[i].style.display = 'none';
+    }
+    tablinks = evt.currentTarget.parentNode.childNodes;
+    for (i = 0; i < tablinks.length; i++) {
+        if (tablinks[i].nodeType != Node.TEXT_NODE) {
+            tablinks[i].className = tablinks[i].className.replace(' active', '');
+        }
+    }
+    tablinks = evt.currentTarget.parentNode.parentNode.childNodes;
+    k = 0;
+    for (i = 0; i < tablinks.length; i++) {
+        if (tablinks[i].nodeType != Node.TEXT_NODE) {
+            if (id + 1 == k) {
+                tablinks[i].style.display = 'block';
+                lazy_tab = window.smartmlCtx.call_exn_handler('lazy_tab', id, global_id);
+                if (lazy_tab) tablinks[i].innerHTML = lazy_tab;
+            }
+            k += 1;
+        }
+    }
+
+    evt.currentTarget.className += ' active';
+}
+
+function openTab(evt, name) {
+    var i, tabcontent, tablinks;
+
+    tabcontent = evt.currentTarget.parentNode.parentNode.childNodes;
+    for (i = 0; i < tabcontent.length; i++) {
+        if (tabcontent[i].className == 'tabcontent') tabcontent[i].style.display = 'none';
+    }
+    tablinks = evt.currentTarget.parentNode.childNodes;
+    for (i = 0; i < tablinks.length; i++) {
+        if (tablinks[i].nodeType != Node.TEXT_NODE) {
+            tablinks[i].className = tablinks[i].className.replace(' active', '');
+        }
+    }
+    tablinks = evt.currentTarget.parentNode.parentNode.childNodes;
+    k = 0;
+    for (i = 0; i < tablinks.length; i++) {
+        if (tablinks[i].nodeType != Node.TEXT_NODE) {
+            if (name + 1 == k) tablinks[i].style.display = 'block';
+            k += 1;
+        }
+    }
+
+    evt.currentTarget.className += ' active';
+}
+
+function initDefaultButtons() {
+    var defaults = document.getElementsByName('button_default');
+    var i;
+    for (i = 0; i < defaults.length; i++) {
+        defaults[i].click();
+    }
+}
+
+function ppInvocationResult(result) {
+    var returnMessage = '';
+    var originatedContract = '';
+    var hasError = false;
+    try {
+        console.log('Results:');
+        console.log(result);
+        if (result.hasOwnProperty('results')) {
+            result = result['results'];
+        }
+        if (result.hasOwnProperty('response')) {
+            result = JSON.parse(result['response']);
+        }
+        if (result.hasOwnProperty('errors')) {
+            return result.errors;
+        }
+        if (Array.isArray(result) && result.length == 1) {
+            result = result[0];
+        }
+        if (result.hasOwnProperty('contents')) {
+            var contents = result['contents'];
+            contents.forEach(function (content) {
+                var metadata = content.metadata;
+                var operation_result = metadata.operation_result;
+                var status = operation_result['status'];
+                returnMessage += 'Status: ' + status + '\n';
+                if (status == 'failed' || status == 'backtracked') {
+                    hasError = true;
+                    operation_result.errors.forEach(function (error) {
+                        returnMessage += '\nError: ' + error.id;
+                        if (error['id'].endsWith('script_rejected')) {
+                            try {
+                                returnMessage += '\n   ' + error['with'].string;
+                            } catch (__error) {
+                                console.log(error);
+                            }
+                        }
+                        if (error['id'].endsWith('invalid_contract_notation')) {
+                            try {
+                                returnMessage += '\n   ' + error['notation'];
+                            } catch (__error) {
+                                console.log(error);
+                            }
+                        }
+                        if (error['id'].endsWith('storage_exhausted.operation')) {
+                            returnMessage += '  \n   (please increase storage limit)';
+                        }
+                    });
+                }
+                try {
+                    operation_result.originated_contracts.forEach(function (originated) {
+                        originatedContract = originated;
+                        returnMessage += '  \n\nOriginatedContract: ' + originated;
+                    });
+                } catch (__error) {
+                    hasError = true;
+                }
+            });
+        } else if (result.hasOwnProperty('kind') && result.hasOwnProperty('id')) {
+            hasError = true;
+            returnMessage += 'Error: ' + result['id'];
+        }
+    } catch (error) {
+        console.log(error);
+        hasError = true;
+        returnMessage += '\n(Error while parsing result)';
+    }
+
+    returnMessage += '\n\n\nDetails:\n\n' + JSON.stringify(result, null, 2);
+    return { message: returnMessage, contract: originatedContract, hasError: hasError };
+}
+
+class SmartmlCtx {
+    constructor() {}
+    call(f, ...rest) {
+        try {
+            return exports[f](...rest);
+        } catch (error) {
+            var result = 0;
+            try {
+                result = this.call('stringOfException', true, error);
+            } catch (_error) {
+                throw error;
+            }
+            if (typeof window.toException === 'function' && !window.location.pathname.includes('ts-ide'))
+                throw toException(result);
+            else throw result;
+        }
+    }
+    call_exn(f, ...rest) {
+        return exports[f](...rest);
+    }
+    call_exn_handler(f, ...rest) {
+        try {
+            return exports[f](...rest);
+        } catch (error) {
+            try {
+                var result = '';
+                try {
+                    result = this.call('stringOfException', false, error);
+                } catch (_error) {
+                    showErrorPre(error);
+                }
+                console.log(result);
+                showErrorPre(result);
+            } catch (_error) {
+                showErrorPre(error);
+            }
+        }
+    }
+}
+
+class SmartmlJS {
+    constructor(contract) {
+        this.ctx = new SmartmlCtx();
+        this.time = 0;
+        if (contract != null) {
+            //console.log(contract);
+            //console.log(contract.exp);
+            this.contract = this.ctx.call('importContract', contract.exp());
+        }
+    }
+
+    smartpy() {
+        return this.ctx.call('string_of_contract', this.contract);
+    }
+    string_of_value(s) {
+        return this.ctx.call('string_of_value', s);
+    }
+    html(self) {
+        return this.ctx.call('htmlContract', this.contract);
+    }
+    fullHtml() {
+        var def = 'Stripped';
+        var onlyDefault = false;
+        return this.ctx.call('fullHtmlContract', def, onlyDefault, this.contract);
+    }
+    messageEffects(result) {
+        return this.ctx.call('messageEffects', result);
+    }
+    messageHtml(result) {
+        return this.ctx.call('messageHtml', result);
+    }
+    messageErrors(result) {
+        return this.ctx.call('messageErrors', result);
+    }
+    messageContract(message) {
+        return this.ctx.call('messageContract', message);
+    }
+    listLength(l) {
+        return this.ctx.call('List.length', l);
+    }
+    listNth(l, n) {
+        return this.ctx.call('List.nth', l, n);
+    }
+    list_to_ocaml(l) {
+        result = this.ctx.call('list.[]');
+        for (var x in reversed(l)) {
+            result = this.ctx.call('list.append', x, result);
+        }
+        return result;
+    }
+    list(l) {
+        r = range(0, this.listLength(l));
+        return r.map((i) => this.listNth(l, i));
+    }
+    ocamlString(s) {
+        return this.ctx.call('string', s);
+    }
+    of_ocamlString(s) {
+        return this.ctx.call('of_ocamlString', s);
+    }
+    pair(l1, l2) {
+        return this.ctx.call('pair', l1, l2);
+    }
+    list_empty(self) {
+        return this.ctx.call('list.[]');
+    }
+    list_unit(x) {
+        return this.ctx.call('list.unit', x);
+    }
+    list_concat(l1, l2) {
+        return this.ctx.call('list.concat', l1, l2);
+    }
+    importValue(value) {
+        if (isinstance(value, str)) return this.importSimpleValue('string', value);
+        if (isinstance(value, int)) return this.importSimpleValue('int', str(value));
+        if (isinstance(value, Record)) return this.ctx.call('importValue', value.export());
+        if (isinstance(value, SpExpr)) return this.ctx.call('importValue', value.export());
+        throw 'Unsupported type for value ${value}';
+    }
+    importSimpleValue(t, s) {
+        return this.ctx.call('importSimpleValue', t, s);
+    }
+    getVariableType(name) {
+        return SmartmlType(this.ctx.call('getVariableType', this.contract, name));
+    }
+    setTime(time) {
+        this.time = time;
+        return 'Setting time to [%s].<br>' % time;
+    }
+    //     execMessage(message, sender = "", **kargs){
+    //         kargs_values = [(name, this.importValue(x)) for (name, x) in sorted(kargs.items())]
+    //         kargs_values_pp = [(name, this.string_of_value(x)) for (name, x) in kargs_values]
+    //         kargs_ml = this.list_empty()
+    //         for (name, value) in kargs_values:
+    //             kargs_ml = this.list_concat(kargs_ml, this.list_unit(this.pair(this.ocamlString(name), value)))
+    //         result = this.ctx.call("execMessage", sender, this.time, this.contract, message, kargs_ml)
+    //         errors = this.messageErrors(result)
+    //         errors = [this.of_ocamlString(x) for x in this.list(errors)]
+    //         effects = this.messageEffects(result)
+    //         effects = [this.of_ocamlString(x) for x in this.list(effects)]
+    //         if len(errors) == 0:
+    //             this.contract = this.messageContract(result)
+    //                 return ExecMessage(this.messageHtml(result), errors, effects);
+    //                 }
+    ppMich(mich, indent) {
+        return this.ctx.call('mich.pp', indent, mich);
+    }
+    ppMichStorage(mich, indent = '') {
+        return this.ctx.call('mich.ppStorage', indent, mich);
+    }
+    ppMichStorageHtml(storage, t) {
+        return this.ctx.call('mich.htmlStorage', storage, t);
+    }
+    ppMichInfos(address, balance, counter, manager, spendable) {
+        return this.ctx.call('mich.htmlInfos', address, balance, counter, manager, spendable);
+    }
+    ppMichStorageType(storageType) {
+        return this.ctx.call('mich.htmlType', storageType);
+    }
+    parseMich(code) {
+        if (isinstance(code, str)) return this.ctx.call('mich.string', code);
+        if (hasattr(code, 'int')) return this.ctx.call('mich.int', code.int);
+        if (hasattr(code, 'string')) return this.ctx.call('mich.string', code.string);
+        if (!hasattr(code, 'prim')) {
+            //#alert(str(code) + " " + str(dir(code)))
+            seq = code.map((c) => this.parseMich(c));
+            seq = this.list_to_ocaml(seq);
+            return this.ctx.call('mich.sequence', seq);
+        }
+        if (hasattr(code, 'args')) args = code.args.map((arg) => this.parseMich(arg));
+        else args = [];
+        argsML = this.list_to_ocaml(args);
+        if (hasattr(code, 'annots')) {
+            annots = code.annots;
+            window.console.log(annots);
+        } else {
+            annots = [];
+        }
+        annots = this.list_to_ocaml(annots.map((x) => this.ocamlString(x)));
+        return this.ctx.call('mich.primitive', code.prim, annots, argsML);
+    }
+    static hashString(s) {
+        return hashed(window.smartmlCtx.call('hashString', s));
+    }
+}
+
+smartmlCtx = new SmartmlCtx();
+in_browser = true;
+function buildSmartlmJS(x) {
+    return new SmartmlJS(x);
+}
+</script>
+            </head>
+            <body>
+                <div id="outputPanel"><div class="jss220"><div><div class="tabs"><div class="tab"><span class="title">Contract</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTab(event, 0);">SmartPy</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 1);">Types</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 2);">Deploy Michelson Contract</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 3);">×</button></div><div class="tabcontent" style="display: block;"><div class="contract"><h3>New contract: <span class="address">KT1TezoooozzSmartPyzzSTATiCzzzwwBFA1</span></h3><h3>Balance: 0.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></h3>
+<h3>Storage:</h3>
+<div id="storageDivInternal"><table class="recordList"><tbody><tr><td class="dataColumn">Max_tickets</td>
+<td class="dataColumn">Players</td>
+<td class="dataColumn">Ticket_available</td>
+<td class="dataColumn">Ticket_cost</td></tr><tr><td class="data"><input type="text" value="5" readonly=""></td><td class="data"><table class="recordList"><tbody><tr><td class="dataColumn">Key</td>
+<td class="dataColumn">Value</td></tr></tbody></table></td><td class="data"><input type="text" value="5" readonly=""></td><td class="data"><span class="token">1.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></span></td></tr></tbody></table></div>
+<h3>Code:</h3>
+import smartpy as sp
+<br>
+<br>class Contract(sp.Contract):
+<br><div class="on"><span class="keyword">def</span> __init__(self)<span class="keyword">:</span><div class="indent5">&nbsp;&nbsp;self.init_type(sp.TRecord(max_tickets = sp.TNat, players = sp.TMap(sp.TNat, sp.TAddress), ticket_available = sp.TNat, ticket_cost = sp.TMutez).layout((("max_tickets", "players"), ("ticket_available", "ticket_cost"))))</div>
+<div class="indent5">&nbsp;&nbsp;self.init(<span class="variable">max_tickets</span> = 5,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">players</span> = {},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">ticket_available</span> = 5,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">ticket_cost</span> = sp.tez(1))</div></div><br>
+<br><div class="on">
+  @sp.entry_point
+<br><span class="keyword">def</span> buy_ticket(<span class="self">self</span>)<span class="keyword">:</span><br><div class="indent5">&nbsp;&nbsp;sp.verify(<span class="self">self</span>.data.ticket_available &gt; <span class="constant">0</span>, <span class="constant">'NO TICKET AVAILABLE'</span>)
+<br>&nbsp;&nbsp;sp.verify(sp.amount &gt;= <span class="self">self</span>.data.ticket_cost, <span class="constant">'INVALID AMOUNT'</span>)
+<br>&nbsp;&nbsp;<span class="self">self</span>.data.players[sp.len(<span class="self">self</span>.data.players)] = sp.sender
+<br>&nbsp;&nbsp;<span class="self">self</span>.data.ticket_available = sp.as_nat(<span class="self">self</span>.data.ticket_available - <span class="constant">1</span>)
+<br>&nbsp;&nbsp;sp.if (sp.amount - <span class="self">self</span>.data.ticket_cost) &gt; <span class="constant">sp.tez(0)</span>:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;sp.send(sp.sender, sp.amount - <span class="self">self</span>.data.ticket_cost)</div></div>
+<br><div class="on">
+  @sp.entry_point
+<br><span class="keyword">def</span> end_game(<span class="self">self</span>)<span class="keyword">:</span><br><div class="indent5">&nbsp;&nbsp;sp.verify(<span class="self">self</span>.data.ticket_available == <span class="constant">0</span>, <span class="constant">'GAME IS STILL ON'</span>)
+<br>&nbsp;&nbsp;sp.send(<span class="self">self</span>.data.players[sp.as_nat(sp.now - <span class="constant">sp.timestamp(0)</span>) % <span class="self">self</span>.data.max_tickets], sp.balance)
+<br>&nbsp;&nbsp;<span class="self">self</span>.data.players = {}
+<br>&nbsp;&nbsp;<span class="self">self</span>.data.ticket_available = <span class="self">self</span>.data.max_tickets</div></div>
+<br>
+<br>sp.add_compilation_target("test", Contract())</div><button class="text-button" onclick="showLine(55)">(line 55)</button></div><div class="tabcontent" style="display: none;"><div class="contract"><h3>Storage:</h3><span class="type"><span class="record">{</span><br>&nbsp;&nbsp;<span class="record">max_tickets</span>: sp.TNat;<br>&nbsp;&nbsp;<span class="record">players</span>: sp.TMap(sp.TNat, sp.TAddress);<br>&nbsp;&nbsp;<span class="record">ticket_available</span>: sp.TNat;<br>&nbsp;&nbsp;<span class="record">ticket_cost</span>: sp.TMutez;<br><span class="record">}.layout((("max_tickets", "players"), ("ticket_available", "ticket_cost")))</span></span><p></p><h3>Entry points:</h3><span class="type"><span class="variant">| buy_ticket</span><br><span class="variant">| end_game</span></span></div></div><div class="tabcontent" style="display: none;"><button class="centertextbutton extramarginbottom" onclick="smartpyContext.gotoOrigination(contractSizes0_0.innerHTML, storageCode0_0.innerText, contractCode0_0.innerText, storageCodeJson0_0.innerText, contractCodeJson0_0.innerText,storageCode0_0.innerHTML, contractCode0_0.innerHTML, storageCodeJson0_0.innerHTML, contractCodeJson0_0.innerHTML)">Deploy Michelson Contract</button><div class="tabs"><div class="tab"><span class="title">Generated Michelson:</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTabLazy(event, 0, 0);">Sizes</button><button name="button_generatedMichelson" class="tablinks" onclick="openTabLazy(event, 1, 0);">Storage</button><button name="button_generatedMichelson" class="tablinks" onclick="openTabLazy(event, 2, 0);">Code</button><button name="button_generatedMichelson" class="tablinks" onclick="openTabLazy(event, 3, 0);">Storage JSON</button><button name="button_generatedMichelson" class="tablinks" onclick="openTabLazy(event, 4, 0);">Code JSON</button></div><div class="tabcontent" style="display: block;"><div><h2>Sizes</h2><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="contractSizes0_0" class="michelson white-space-pre"><table><tbody><tr><td class="pad10"><span class="item">Storage: </span></td><td class="pad10"><div class="progress" style="height: 20px; width: 150px;"><div class="progress-bar" style="width:0;" role="progressbar" 10'=""></div></div></td><td class="pad10, code_right">19 Bytes</td></tr><tr><td class="pad10"><span class="item">Code: </span></td><td class="pad10"><div class="progress" style="height: 20px; width: 150px;"><div class="progress-bar" style="width:4;" role="progressbar" 10'=""></div></div></td><td class="pad10, code_right">702 Bytes</td></tr></tbody></table></div></div></div><div class="tabcontent" style="display: none;"><div><h2>Initial Storage</h2><div><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="storageCode0_0" class="michelson white-space-pre-wrap">(Pair (Pair 5 {}) (Pair 5 1000000))</div></div></div></div><div class="tabcontent" style="display: none;"><div><h2>Michelson Code</h2><div><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="contractCode0_0" class="michelson white-space-pre">parameter (or (unit %buy_ticket) (unit %end_game));<br>storage &nbsp;&nbsp;(pair (pair (nat %max_tickets) (map %players nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)));<br><div class="michelsonLine">code<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;UNPAIR;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@parameter : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;IF_LEFT<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DROP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># == buy_ticket ==</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># sp.verify(self.data.ticket_available &gt; 0, 'NO TICKET AVAILABLE')</span> <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET 3;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH nat 0; <span class="comment">#</span> <span class="stack">nat : nat : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMPARE;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">int : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">bool : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH string "NO TICKET AVAILABLE"; <span class="comment">#</span> <span class="stack">string : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}; <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># sp.verify(sp.amount &gt;= self.data.ticket_cost, 'INVALID AMOUNT')</span> <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET 4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">mutez : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMOUNT;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@amount : mutez : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMPARE;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">int : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GE;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">bool : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH string "INVALID AMOUNT"; <span class="comment">#</span> <span class="stack">string : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}; <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># self.data.players[sp.len(self.data.players)] = sp.sender</span> <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNPAIR;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (nat %max_tickets) (map %players nat address) : pair (nat %ticket_available) (mutez %ticket_cost) : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNPAIR;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : map nat address : pair (nat %ticket_available) (mutez %ticket_cost) : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost) : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SENDER;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@sender : map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost) : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOME;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">option address : map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost) : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DIG 4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : option address : map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (nat %max_tickets) (map %players nat address) : option address : map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">map nat address : option address : map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SIZE;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : option address : map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : map nat address : pair (nat %ticket_available) (mutez %ticket_cost)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PAIR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair nat (map nat address) : pair (nat %ticket_available) (mutez %ticket_cost)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PAIR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># self.data.ticket_available = sp.as_nat(self.data.ticket_available - 1)</span> <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH nat 1; <span class="comment">#</span> <span class="stack">nat : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DIG 2;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : nat : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET 3;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : nat : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUB;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">int : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ISNAT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">option nat : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 19; <span class="comment">#</span> <span class="stack">int : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}; <span class="comment">#</span> <span class="stack">@some : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE 3;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># if (sp.amount - self.data.ticket_cost) &gt; sp.tez(0):</span> <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET 4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">mutez : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH mutez 0; <span class="comment">#</span> <span class="stack">mutez : mutez : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">mutez : mutez : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMOUNT;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@amount : mutez : mutez : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUB_MUTEZ;&nbsp; <span class="comment">#</span> <span class="stack">option mutez : mutez : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 22; <span class="comment">#</span> <span class="stack">int : mutez : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}; <span class="comment">#</span> <span class="stack">@some : mutez : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMPARE;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">int : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">bool : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># sp.send(sp.sender, sp.amount - self.data.ticket_cost)</span> <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NIL operation; <span class="comment">#</span> <span class="stack">list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SENDER;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@sender : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTRACT unit; <span class="comment">#</span> <span class="stack">option (contract unit) : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 24; <span class="comment">#</span> <span class="stack">int : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}; <span class="comment">#</span> <span class="stack">@some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP 3;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : @some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET 4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">mutez : @some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMOUNT;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@amount : mutez : @some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUB_MUTEZ;&nbsp; <span class="comment">#</span> <span class="stack">option mutez : @some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 22; <span class="comment">#</span> <span class="stack">int : @some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}; <span class="comment">#</span> <span class="stack">@some : @some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNIT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">unit : @some : @some : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSFER_TOKENS; <span class="comment">#</span> <span class="stack">operation : list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONS;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NIL operation; <span class="comment">#</span> <span class="stack">list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}; <span class="comment">#</span> <span class="stack">list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DROP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># == end_game ==</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># sp.verify(self.data.ticket_available == 0, 'GAME IS STILL ON')</span> <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET 3;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH nat 0; <span class="comment">#</span> <span class="stack">nat : nat : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMPARE;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">int : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">bool : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH string "GAME IS STILL ON"; <span class="comment">#</span> <span class="stack">string : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}; <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># sp.send(self.data.players[sp.as_nat(sp.now - sp.timestamp(0)) % self.data.max_tickets], sp.balance)</span> <span class="comment">#</span> <span class="stack">@storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NIL operation; <span class="comment">#</span> <span class="stack">list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : @storage : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (nat %max_tickets) (map %players nat address) : @storage : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">map nat address : @storage : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : map nat address : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : @storage : map nat address : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUG 3;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (nat %max_tickets) (map %players nat address) : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH timestamp "1970-01-01T00:00:00Z"; <span class="comment">#</span> <span class="stack">timestamp : nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOW;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@now : timestamp : nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUB;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">int : nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ISNAT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">option nat : nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 31; <span class="comment">#</span> <span class="stack">int : nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}; <span class="comment">#</span> <span class="stack">@some : nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDIV;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">option (pair nat nat) : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 31; <span class="comment">#</span> <span class="stack">int : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}; <span class="comment">#</span> <span class="stack">nat : map nat address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">option address : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 32; <span class="comment">#</span> <span class="stack">int : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}; <span class="comment">#</span> <span class="stack">@some : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTRACT unit; <span class="comment">#</span> <span class="stack">option (contract unit) : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF_NONE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH int 35; <span class="comment">#</span> <span class="stack">int : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILWITH;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">FAILED</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}; <span class="comment">#</span> <span class="stack">@some : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BALANCE;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@balance : @some : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNIT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">unit : @balance : @some : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSFER_TOKENS; <span class="comment">#</span> <span class="stack">operation : list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONS;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">list operation : @storage</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">@storage : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># self.data.players = {}</span> <span class="comment">#</span> <span class="stack">@storage : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNPAIR;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (nat %max_tickets) (map %players nat address) : pair (nat %ticket_available) (mutez %ticket_cost) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : pair (nat %ticket_available) (mutez %ticket_cost) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMPTY_MAP nat address; <span class="comment">#</span> <span class="stack">map nat address : nat : pair (nat %ticket_available) (mutez %ticket_cost) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : map nat address : pair (nat %ticket_available) (mutez %ticket_cost) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PAIR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair nat (map nat address) : pair (nat %ticket_available) (mutez %ticket_cost) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PAIR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># self.data.ticket_available = self.data.max_tickets</span> <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair nat (map nat address) : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">nat : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE 3;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)) : list operation</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SWAP;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}; <span class="comment">#</span> <span class="stack">list operation : pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost))</span><br>&nbsp;&nbsp;&nbsp;&nbsp;PAIR;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">#</span> <span class="stack">pair (list operation) (pair (pair nat (map nat address)) (pair (nat %ticket_available) (mutez %ticket_cost)))</span><br>&nbsp;&nbsp;};</div></div></div></div></div><div class="tabcontent" style="display: none;"><div><h2>Initial Storage</h2><div><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="storageCodeJson0_0" class="michelson white-space-pre"><div class="white-space-pre">{ "prim": "Pair", "args": [ { "prim": "Pair", "args": [ { "int": "5" }, [] ] }, { "prim": "Pair", "args": [ { "int": "5" }, { "int": "1000000" } ] } ] }</div></div></div></div></div><div class="tabcontent" style="display: none;"><div><h2>JSON Representation</h2><div><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="contractCodeJson0_0" class="michelson white-space-pre"><div class="white-space-pre">[<br>  {<br>    "prim": "storage",<br>    "args": [<br>      {<br>        "prim": "pair",<br>        "args": [<br>          {<br>            "prim": "pair",<br>            "args": [ { "prim": "nat", "annots": [ "%max_tickets" ] }, { "prim": "map", "args": [ { "prim": "nat" }, { "prim": "address" } ], "annots": [ "%players" ] } ]<br>          },<br>          { "prim": "pair", "args": [ { "prim": "nat", "annots": [ "%ticket_available" ] }, { "prim": "mutez", "annots": [ "%ticket_cost" ] } ] }<br>        ]<br>      }<br>    ]<br>  },<br>  { "prim": "parameter", "args": [ { "prim": "or", "args": [ { "prim": "unit", "annots": [ "%buy_ticket" ] }, { "prim": "unit", "annots": [ "%end_game" ] } ] } ] },<br>  {<br>    "prim": "code",<br>    "args": [<br>      [<br>        { "prim": "UNPAIR" },<br>        {<br>          "prim": "IF_LEFT",<br>          "args": [<br>            [<br>              { "prim": "DROP" },<br>              { "prim": "DUP" },<br>              { "prim": "GET", "args": [ { "int": "3" } ] },<br>              { "prim": "PUSH", "args": [ { "prim": "nat" }, { "int": "0" } ] },<br>              { "prim": "COMPARE" },<br>              { "prim": "LT" },<br>              { "prim": "IF", "args": [ [], [ { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "NO TICKET AVAILABLE" } ] }, { "prim": "FAILWITH" } ] ] },<br>              { "prim": "DUP" },<br>              { "prim": "GET", "args": [ { "int": "4" } ] },<br>              { "prim": "AMOUNT" },<br>              { "prim": "COMPARE" },<br>              { "prim": "GE" },<br>              { "prim": "IF", "args": [ [], [ { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "INVALID AMOUNT" } ] }, { "prim": "FAILWITH" } ] ] },<br>              { "prim": "DUP" },<br>              { "prim": "UNPAIR" },<br>              { "prim": "UNPAIR" },<br>              { "prim": "SWAP" },<br>              { "prim": "SENDER" },<br>              { "prim": "SOME" },<br>              { "prim": "DIG", "args": [ { "int": "4" } ] },<br>              { "prim": "CAR" },<br>              { "prim": "CDR" },<br>              { "prim": "SIZE" },<br>              { "prim": "UPDATE" },<br>              { "prim": "SWAP" },<br>              { "prim": "PAIR" },<br>              { "prim": "PAIR" },<br>              { "prim": "DUP" },<br>              { "prim": "PUSH", "args": [ { "prim": "nat" }, { "int": "1" } ] },<br>              { "prim": "DIG", "args": [ { "int": "2" } ] },<br>              { "prim": "GET", "args": [ { "int": "3" } ] },<br>              { "prim": "SUB" },<br>              { "prim": "ISNAT" },<br>              { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "19" } ] }, { "prim": "FAILWITH" } ], [] ] },<br>              { "prim": "UPDATE", "args": [ { "int": "3" } ] },<br>              { "prim": "DUP" },<br>              { "prim": "GET", "args": [ { "int": "4" } ] },<br>              { "prim": "PUSH", "args": [ { "prim": "mutez" }, { "int": "0" } ] },<br>              { "prim": "SWAP" },<br>              { "prim": "AMOUNT" },<br>              { "prim": "SUB_MUTEZ" },<br>              { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "22" } ] }, { "prim": "FAILWITH" } ], [] ] },<br>              { "prim": "COMPARE" },<br>              { "prim": "GT" },<br>              {<br>                "prim": "IF",<br>                "args": [<br>                  [<br>                    { "prim": "NIL", "args": [ { "prim": "operation" } ] },<br>                    { "prim": "SENDER" },<br>                    { "prim": "CONTRACT", "args": [ { "prim": "unit" } ] },<br>                    { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "24" } ] }, { "prim": "FAILWITH" } ], [] ] },<br>                    { "prim": "DUP", "args": [ { "int": "3" } ] },<br>                    { "prim": "GET", "args": [ { "int": "4" } ] },<br>                    { "prim": "AMOUNT" },<br>                    { "prim": "SUB_MUTEZ" },<br>                    { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "22" } ] }, { "prim": "FAILWITH" } ], [] ] },<br>                    { "prim": "UNIT" },<br>                    { "prim": "TRANSFER_TOKENS" },<br>                    { "prim": "CONS" }<br>                  ],<br>                  [ { "prim": "NIL", "args": [ { "prim": "operation" } ] } ]<br>                ]<br>              }<br>            ],<br>            [<br>              { "prim": "DROP" },<br>              { "prim": "DUP" },<br>              { "prim": "GET", "args": [ { "int": "3" } ] },<br>              { "prim": "PUSH", "args": [ { "prim": "nat" }, { "int": "0" } ] },<br>              { "prim": "COMPARE" },<br>              { "prim": "EQ" },<br>              { "prim": "IF", "args": [ [], [ { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "GAME IS STILL ON" } ] }, { "prim": "FAILWITH" } ] ] },<br>              { "prim": "NIL", "args": [ { "prim": "operation" } ] },<br>              { "prim": "SWAP" },<br>              { "prim": "DUP" },<br>              { "prim": "CAR" },<br>              { "prim": "CDR" },<br>              { "prim": "SWAP" },<br>              { "prim": "DUP" },<br>              { "prim": "DUG", "args": [ { "int": "3" } ] },<br>              { "prim": "CAR" },<br>              { "prim": "CAR" },<br>              { "prim": "PUSH", "args": [ { "prim": "timestamp" }, { "string": "1970-01-01T00:00:00Z" } ] },<br>              { "prim": "NOW" },<br>              { "prim": "SUB" },<br>              { "prim": "ISNAT" },<br>              { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "31" } ] }, { "prim": "FAILWITH" } ], [] ] },<br>              { "prim": "EDIV" },<br>              { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "31" } ] }, { "prim": "FAILWITH" } ], [ { "prim": "CDR" } ] ] },<br>              { "prim": "GET" },<br>              { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "32" } ] }, { "prim": "FAILWITH" } ], [] ] },<br>              { "prim": "CONTRACT", "args": [ { "prim": "unit" } ] },<br>              { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "35" } ] }, { "prim": "FAILWITH" } ], [] ] },<br>              { "prim": "BALANCE" },<br>              { "prim": "UNIT" },<br>              { "prim": "TRANSFER_TOKENS" },<br>              { "prim": "CONS" },<br>              { "prim": "SWAP" },<br>              { "prim": "UNPAIR" },<br>              { "prim": "CAR" },<br>              { "prim": "EMPTY_MAP", "args": [ { "prim": "nat" }, { "prim": "address" } ] },<br>              { "prim": "SWAP" },<br>              { "prim": "PAIR" },<br>              { "prim": "PAIR" },<br>              { "prim": "DUP" },<br>              { "prim": "CAR" },<br>              { "prim": "CAR" },<br>              { "prim": "UPDATE", "args": [ { "int": "3" } ] },<br>              { "prim": "SWAP" }<br>            ]<br>          ]<br>        },<br>        { "prim": "PAIR" }<br>      ]<br>    ]<br>  }<br>]</div></div></div></div></div></div></div><div class="tabcontent" style="display: none;"></div></div>
+<div class="tabs"><div class="tab"><span class="title">Transaction</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTab(event, 0);">Summary</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 1);">Michelson</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 2);">X</button></div><div class="tabcontent" style="display: block;"><div class="execMessage execMessageOK"><h3>Transaction [OK] by [<span class="address">tz1h4EsGunH2Ue1T2uNs8mfKZ8XZoQji3HcK</span>] at time [timestamp(0)] to <span class="address">KT1TezoooozzSmartPyzzSTATiCzzzwwBFA1</span></h3><div class="subtype"><select class="selection"><option value="buy_ticket">Buy_ticket</option></select></div><h3>Balance: 1.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></h3><h3>Operations:</h3><h3>Storage:</h3><div class="subtype"><div id="storageDivInternal"><table class="recordList"><tbody><tr><td class="dataColumn">Max_tickets</td>
+<td class="dataColumn">Players</td>
+<td class="dataColumn">Ticket_available</td>
+<td class="dataColumn">Ticket_cost</td></tr><tr><td class="data"><input type="text" value="5" readonly=""></td><td class="data"><table class="recordList"><tbody><tr><td class="dataColumn">Key</td>
+<td class="dataColumn">Value</td></tr><tr><td class="data"><input type="text" value="0" readonly=""></td><td class="data"><span class="address">tz1h4EsGunH2Ue1T2uNs8mfKZ8XZoQji3HcK</span></td></tr></tbody></table></td><td class="data"><input type="text" value="4" readonly=""></td><td class="data"><span class="token">1.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></span></td></tr></tbody></table></div></div></div>(<button class="text-button" onclick="showLine(58)">line 58</button>)</div><div class="tabcontent" style="display: none;"><div class="tabs"><div class="tab"><span class="title">Generated Michelson</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTab(event, 0);">Parameter Michelson</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 1);">Parameter JSON</button></div><div class="tabcontent" style="display: block;"><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="paramsCodetransaction_params" class="michelson white-space-pre-wrap">(Left Unit)</div></div><div class="tabcontent" style="display: none;"><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="paramsCodeJsontransaction_params_json" class="michelson white-space-pre"><div class="white-space-pre">{ "prim": "Left", "args": [ { "prim": "Unit" } ] }</div></div></div></div></div><div class="tabcontent" style="display: none;"></div></div>
+<div class="tabs"><div class="tab"><span class="title">Transaction</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTab(event, 0);">Summary</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 1);">Michelson</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 2);">X</button></div><div class="tabcontent" style="display: block;"><div class="execMessage execMessageOK"><h3>Transaction [OK] by [<span class="address">tz1Xf3VqvqsiDxunSoMsJe3A63fmjaR2eLYk</span>] at time [timestamp(0)] to <span class="address">KT1TezoooozzSmartPyzzSTATiCzzzwwBFA1</span></h3><div class="subtype"><select class="selection"><option value="buy_ticket">Buy_ticket</option></select></div><h3>Balance: 4.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></h3><h3>Operations:</h3><div class="operation">Transfer <span class="token">2.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></span> to sp.contract(sp.TUnit, <span class="address">tz1Xf3VqvqsiDxunSoMsJe3A63fmjaR2eLYk</span>).open_some()<br></div><h3>Storage:</h3><div class="subtype"><div id="storageDivInternal"><table class="recordList"><tbody><tr><td class="dataColumn">Max_tickets</td>
+<td class="dataColumn">Players</td>
+<td class="dataColumn">Ticket_available</td>
+<td class="dataColumn">Ticket_cost</td></tr><tr><td class="data"><input type="text" value="5" readonly=""></td><td class="data"><table class="recordList"><tbody><tr><td class="dataColumn">Key</td>
+<td class="dataColumn">Value</td></tr><tr><td class="data"><input type="text" value="0" readonly=""></td><td class="data"><span class="address">tz1h4EsGunH2Ue1T2uNs8mfKZ8XZoQji3HcK</span></td></tr>
+<tr><td class="data"><input type="text" value="1" readonly=""></td><td class="data"><span class="address">tz1Xf3VqvqsiDxunSoMsJe3A63fmjaR2eLYk</span></td></tr></tbody></table></td><td class="data"><input type="text" value="3" readonly=""></td><td class="data"><span class="token">1.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></span></td></tr></tbody></table></div></div></div>(<button class="text-button" onclick="showLine(59)">line 59</button>)</div><div class="tabcontent" style="display: none;"><div class="tabs"><div class="tab"><span class="title">Generated Michelson</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTab(event, 0);">Parameter Michelson</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 1);">Parameter JSON</button></div><div class="tabcontent" style="display: block;"><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="paramsCodetransaction_params" class="michelson white-space-pre-wrap">(Left Unit)</div></div><div class="tabcontent" style="display: none;"><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="paramsCodeJsontransaction_params_json" class="michelson white-space-pre"><div class="white-space-pre">{ "prim": "Left", "args": [ { "prim": "Unit" } ] }</div></div></div></div></div><div class="tabcontent" style="display: none;"></div></div>
+<div class="tabs"><div class="tab"><span class="title">Transaction</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTab(event, 0);">Summary</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 1);">Michelson</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 2);">X</button></div><div class="tabcontent" style="display: block;"><div class="execMessage execMessageOK"><h3>Transaction [OK] by [<span class="address">tz1h4EsGunH2Ue1T2uNs8mfKZ8XZoQji3HcK</span>] at time [timestamp(0)] to <span class="address">KT1TezoooozzSmartPyzzSTATiCzzzwwBFA1</span></h3><div class="subtype"><select class="selection"><option value="buy_ticket">Buy_ticket</option></select></div><h3>Balance: 3.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></h3><h3>Operations:</h3><h3>Storage:</h3><div class="subtype"><div id="storageDivInternal"><table class="recordList"><tbody><tr><td class="dataColumn">Max_tickets</td>
+<td class="dataColumn">Players</td>
+<td class="dataColumn">Ticket_available</td>
+<td class="dataColumn">Ticket_cost</td></tr><tr><td class="data"><input type="text" value="5" readonly=""></td><td class="data"><table class="recordList"><tbody><tr><td class="dataColumn">Key</td>
+<td class="dataColumn">Value</td></tr><tr><td class="data"><input type="text" value="0" readonly=""></td><td class="data"><span class="address">tz1h4EsGunH2Ue1T2uNs8mfKZ8XZoQji3HcK</span></td></tr>
+<tr><td class="data"><input type="text" value="1" readonly=""></td><td class="data"><span class="address">tz1Xf3VqvqsiDxunSoMsJe3A63fmjaR2eLYk</span></td></tr>
+<tr><td class="data"><input type="text" value="2" readonly=""></td><td class="data"><span class="address">tz1h4EsGunH2Ue1T2uNs8mfKZ8XZoQji3HcK</span></td></tr></tbody></table></td><td class="data"><input type="text" value="2" readonly=""></td><td class="data"><span class="token">1.000000<img height="20" width="20" src="static/img/tezos.svg" alt="tz"></span></td></tr></tbody></table></div></div></div>(<button class="text-button" onclick="showLine(60)">line 60</button>)</div><div class="tabcontent" style="display: none;"><div class="tabs"><div class="tab"><span class="title">Generated Michelson</span><button name="button_generatedMichelson" class="tablinks active" onclick="openTab(event, 0);">Parameter Michelson</button><button name="button_generatedMichelson" class="tablinks" onclick="openTab(event, 1);">Parameter JSON</button></div><div class="tabcontent" style="display: block;"><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="paramsCodetransaction_params" class="michelson white-space-pre-wrap">(Left Unit)</div></div><div class="tabcontent" style="display: none;"><div class="menu"> <button onclick="copyMichelson(this);">Copy</button></div><div id="paramsCodeJsontransaction_params_json" class="michelson white-space-pre"><div class="white-space-pre">{ "prim": "Left", "args": [ { "prim": "Unit" } ] }</div></div></div></div></div><div class="tabcontent" style="display: none;"></div></div>
+</div></div></div>
+            </body>
+        </html>

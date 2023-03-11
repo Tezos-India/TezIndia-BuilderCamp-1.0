@@ -7,8 +7,10 @@ It gives the inventor the exclusive right to prevent others from making, using, 
 While storing an idea on the blockchain can provide evidence of the idea's existence and the individual's ownership, it may not necessarily protect against someone else filing a patent for the same idea. The patent system generally operates on a "first to file" basis, meaning that the first person to file a patent application for an idea will generally be granted the patent rights, regardless of who came up with the idea first.
 
 <br/>
-However, having a record of the idea's existence and ownership could be useful in the event of a patent dispute, as it could help establish that the individual had prior claim to the idea. Additionally, keeping detailed records and documentation of the idea's development process can also be helpful in proving ownership and defending against patent infringement claims.
+However, having a record of the idea's existence and ownership could be useful in the event of a patent dispute, as it could help establish that the individual had prior claim to the idea. 
 <br/>
+Additionally, keeping detailed records and documentation of the idea's development process can also be helpful in proving ownership and defending against patent infringement claims.
+<br/> 
 Ultimately, while storing an idea on the blockchain may provide some level of protection, it is not a foolproof solution, and seeking legal advice from a patent attorney or agent is always recommended for those looking to protect their intellectual property.
 <br/>
 

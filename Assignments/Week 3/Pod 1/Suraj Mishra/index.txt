@@ -1,0 +1,1 @@
+This contains the week 3 project for the voting smartpy contract build for week 2 submission.

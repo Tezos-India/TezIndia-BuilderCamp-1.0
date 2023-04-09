@@ -1,0 +1,54 @@
+import smartpy as sp
+
+# Define the token contract
+class TokenFaucet(sp.Contract):
+    def __init__(self, token_name, token_symbol, token_supply, faucet_limit, cooldown_period):
+        self.init(
+            token_name=token_name,
+            token_symbol=token_symbol,
+            token_supply=token_supply,
+            faucet_limit=faucet_limit,
+            cooldown_period=cooldown_period,
+            tokens_claimed={},
+            last_claimed={},
+        )
+    
+    # Define the token request entry point
+    @sp.entry_point
+    def request_tokens(self, params):
+        sp.verify(~self.data.tokens_claimed.contains(sp.sender), message="Already claimed tokens")
+        sp.verify(sp.now - self.data.last_claimed.get(sp.sender, 0) >= self.data.cooldown_period, message="Cooldown period not met")
+        sp.verify(self.data.token_supply >= self.data.faucet_limit, message="Faucet limit reached")
+        
+        # Transfer tokens to the requester
+        token_amount = sp.amount * self.data.faucet_limit
+        sp.transfer(token_amount, sp.sender)
+        
+        # Update storage
+        self.data.tokens_claimed[sp.sender] = True
+        self.data.last_claimed[sp.sender] = sp.now
+        self.data.token_supply -= self.data.faucet_limit
+    
+    # Define the admin entry point to manage the token supply and faucet limit
+    @sp.entry_point
+    def manage_faucet(self, params):
+        sp.verify(sp.sender == self.owner, message="Only contract owner can manage the faucet")
+        self.data.token_supply += params.token_amount
+        self.data.faucet_limit = params.faucet_limit
+    
+    # Define the admin entry point to set the cooldown period
+    @sp.entry_point
+    def set_cooldown_period(self, params):
+        sp.verify(sp.sender == self.owner, message="Only contract owner can set the cooldown period")
+        self.data.cooldown_period = params.cooldown_period
+
+# Deploy the token faucet contract
+def main():
+    token_name = "MyToken"
+    token_symbol = "MTK"
+    token_supply = 1000000
+    faucet_limit = 100
+    cooldown_period = 86400 # 24 hours in seconds
+    
+    token_faucet = TokenFaucet(token_name, token_symbol, token_supply, faucet_limit, cooldown_period)
+    sp.add_compilation_target("token_faucet", token_faucet)

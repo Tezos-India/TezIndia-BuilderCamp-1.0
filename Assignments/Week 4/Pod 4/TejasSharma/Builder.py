@@ -20,14 +20,12 @@ class NftTest(
 class Building(sp.Contract):
     def __init__(self, nftContract):
         self.init(        
-            admin_acc = sp.address("tz1Yr67qu5KpFqJnW2v1GEtSXo4XhYWFgAom"),
-            # admin_acc = sp.test_account("Admin").address,
+            admin_acc = sp.test_account("Admin").address,
             apartmentList = sp.big_map(l = {}, 
                                        tkey = sp.TString, 
                                        tvalue = sp.TPair(sp.TAddress, sp.TNat)
                                     ),
-            nftTarget = sp.address("KT1T29PtP3cJMqR5HSgg6G49T15LuEon1jDC"),
-            # nftTarget = nftContract,
+            nftTarget = nftContract,
             token_num = sp.nat(0),
             tokenMap = sp.big_map(l = {},
                                  tkey = sp.TString,

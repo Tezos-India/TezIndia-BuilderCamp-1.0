@@ -37,7 +37,7 @@ const App = () => {
     
   };
 
-  // TODO 11.a - Complete onEndGame function
+  // TODO 11.a - Complete onEndGame function 
   const onEndGame = async () => {
     try{
       setLoading(true);

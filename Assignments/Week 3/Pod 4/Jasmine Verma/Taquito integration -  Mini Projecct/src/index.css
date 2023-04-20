@@ -1,0 +1,16 @@
+#root,
+html,
+body {
+  height: 100%;
+}
+#certificateWrapper img {
+  display: block;
+}
+#certificateWrapper p {
+  font-family: "Staatliches", cursive;
+  margin: 0;
+  position: absolute;
+  left: 90px;
+  top: 300px;
+  font-size: 40pt;
+}

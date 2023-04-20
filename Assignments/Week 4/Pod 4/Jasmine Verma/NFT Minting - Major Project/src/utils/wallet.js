@@ -2,7 +2,7 @@
 import { BeaconWallet } from "@taquito/beacon-wallet";
 
 export const wallet = new BeaconWallet({
-  name: "Random Voting Dapp",
+  name: "Tezos Lottery Dapp",
   preferredNetwork: "ghostnet",
 });
 

@@ -1,4 +1,4 @@
-
+// TODO 6 - Call buy_ticket entrypoint in the Lottery contract
 import { tezos } from "./tezos";
 
 export const buyTicketOperation = async (option) => {

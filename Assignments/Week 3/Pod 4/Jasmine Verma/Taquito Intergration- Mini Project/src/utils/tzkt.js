@@ -1,4 +1,4 @@
-
+// TODO 8 - Fetch lottery contract storage
 
 import axios from "axios";
 

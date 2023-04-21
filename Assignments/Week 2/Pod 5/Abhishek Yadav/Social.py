@@ -70,3 +70,4 @@ if "templates" not in __name__:
         post = social_media.get_post(post_hash = social_media.data.posts.keys()[0]).open_some()
         sp.verify(post.likes == 1)
         sp.verify(post.dislikes == 1)
+        

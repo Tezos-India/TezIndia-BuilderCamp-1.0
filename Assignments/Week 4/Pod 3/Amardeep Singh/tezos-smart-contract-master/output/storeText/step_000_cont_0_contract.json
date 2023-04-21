@@ -1,0 +1,15 @@
+[
+  { "prim": "storage", "args": [ { "prim": "string" } ] },
+  { "prim": "parameter", "args": [ { "prim": "or", "args": [ { "prim": "string", "annots": [ "%append" ] }, { "prim": "string", "annots": [ "%replace" ] } ] } ] },
+  {
+    "prim": "code",
+    "args": [
+      [
+        { "prim": "UNPAIR" },
+        { "prim": "IF_LEFT", "args": [ [ { "prim": "SWAP" }, { "prim": "CONCAT" } ], [ { "prim": "SWAP" }, { "prim": "DROP" } ] ] },
+        { "prim": "NIL", "args": [ { "prim": "operation" } ] },
+        { "prim": "PAIR" }
+      ]
+    ]
+  }
+]

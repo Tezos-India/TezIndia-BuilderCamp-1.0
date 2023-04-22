@@ -1,16 +1,42 @@
-## Instructions to upload your assignment :  
+# Pokemon NFT Marketplace
 
-1. Go to folder with your respective Week no. .
-2. Go to folder with your respective pod name .
-3. Create a folder of your name 
-4. UPload your assignment with File name as Assignment_name_submission
+This is a sample NFT marketplace contract for trading Pokemon NFTs.
 
+## Contract Overview
 
-For example, I am Simarpreet singh, part of pod 1, and have to submit assignment of week 2: smartpy project 
+The contract is composed of two smart contracts:
+- `Pokemon`: an FA2-compatible smart contract that implements the minting and transfer of Pokemon NFTs.
+- `PokemonMarketplace`: a marketplace smart contract that allows users to buy and sell Pokemon NFTs.
 
+<<<<<<< HEAD
 Go to folder Week 2
 Go to foler Pod 1
 Create folder Simarpreet Singha
 upload my assignment files as Smartpy_project 
+=======
+The `PokemonMarketplace` contract relies on the `Pokemon` contract to handle the minting and transfer of NFTs.
 
-supposingly if you have more than 1 assingment, then create folder name as Assignment 1 and Assignment 2 and then do upload specific files in those folders
+## Contract Usage
+
+### Minting NFTs
+
+To mint a new Pokemon NFT, call the `mint` entry point on the `PokemonMarketplace` contract with the following parameters:
+- `metadata`: a string containing the URL of the metadata for the NFT.
+- `price`: the price of the NFT in tez.
+
+### Buying NFTs
+
+To buy a Pokemon NFT, call the `buy` entry point on the `PokemonMarketplace` contract with the following parameters:
+- `token_id`: the ID of the NFT to buy.
+
+### Updating Admin
+
+To update the admin of the `PokemonMarketplace` contract, call the `update_admin` entry point with the new admin address.
+
+### Withdrawing Funds
+
+To withdraw funds from the contract, call the `withdraw` entry point with the following parameters:
+- `amount`: the amount of tez to withdraw.
+- `address`: the address to send the funds to.
+>>>>>>> 07a6c5308b516e5f9f0addc7dda623e2d54c2920
+

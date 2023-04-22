@@ -10,7 +10,7 @@ For example, I am Simarpreet singh, part of pod 1, and have to submit assignment
 
 Go to folder Week 2
 Go to foler Pod 1
-Create folder Simarpreet Singh
+Create folder Simarpreet Singha
 upload my assignment files as Smartpy_project 
 
 supposingly if you have more than 1 assingment, then create folder name as Assignment 1 and Assignment 2 and then do upload specific files in those folders

@@ -1,0 +1,9 @@
+<svg width="182" height="182" viewBox="0 0 182 182" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 181V1M41 181V1M61 181V1M81 181V1M101 181V1M121 181V1M141 181V1M161 181V1M1 21H181M1 41H181M1 61H181M1 81H181M1 101H181M1 121H181M1 141H181M1 161H181M1 181V1H181V181H1Z" stroke="url(#paint0_radial_21_2823)"/>
+<defs>
+<radialGradient id="paint0_radial_21_2823" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(91 91) rotate(90) scale(90)">
+<stop stop-color="#979797" stop-opacity="0.7"/>
+<stop offset="1" stop-color="#979797" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

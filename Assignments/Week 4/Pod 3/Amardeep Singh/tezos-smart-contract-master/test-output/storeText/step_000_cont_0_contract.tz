@@ -1,0 +1,21 @@
+parameter (or (string %append) (string %replace));
+storage   string;
+code
+  {
+    UNPAIR;     # @parameter : @storage
+    IF_LEFT
+      {
+        SWAP;       # @storage : @parameter%append
+        # == append ==
+        # self.data.text += params.text # @storage : @parameter%append
+        CONCAT;     # string
+      }
+      {
+        SWAP;       # @storage : @parameter%replace
+        DROP;       # @parameter%replace
+        # == replace ==
+        # self.data.text = params.text # @parameter%replace
+      }; # string
+    NIL operation; # list operation : string
+    PAIR;       # pair (list operation) string
+  };

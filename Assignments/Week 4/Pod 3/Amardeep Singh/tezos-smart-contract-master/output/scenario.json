@@ -1,0 +1,56 @@
+[
+ {
+  "shortname": "StoreText",
+  "longname": "StoreText",
+  "scenario": [
+   {
+    "action": "newContract",
+    "accept_unknown_types": false,
+    "export": "(template_id ((\"hello.py\" 21) static_id 0) \nstorage ((\"hello.py\" 7) record (text ((\"hello.py\" 7) literal (string \"Hello\"))))\nstorage_type (())\nentry_points ((append True None None None True (\"hello.py\" 14) (((\"hello.py\" 15) set ((\"hello.py\" 15) attr ((\"hello.py\" 21) data) \"text\") ((\"hello.py\" 15) add ((\"hello.py\" 15) attr ((\"hello.py\" 21) data) \"text\") ((\"hello.py\" 15) attr ((\"hello.py\" 14) params) \"text\"))))) (replace True None None None True (\"hello.py\" 10) (((\"hello.py\" 11) set ((\"hello.py\" 15) attr ((\"hello.py\" 21) data) \"text\") ((\"hello.py\" 11) attr ((\"hello.py\" 10) params) \"text\")))))\nflags ()\nprivates ()\nviews ()\nentry_points_layout ()\ninitial_metadata ()\nbalance ())",
+    "id": "((\"hello.py\" 21) static_id 0)",
+    "line_no": "(\"hello.py\" 21)",
+    "show": true
+   },
+   {
+    "action": "verify",
+    "condition": "((\"hello.py\" 23) eq ((\"hello.py\" 23) attr ((\"hello.py\" 21) contract_data ((\"hello.py\" 21) static_id 0)) \"text\") ((\"hello.py\" 23) literal (string \"Hello\")))",
+    "line_no": "(\"hello.py\" 23)"
+   },
+   {
+    "action": "message",
+    "id": "((\"hello.py\" 21) static_id 0)",
+    "line_no": "(\"hello.py\" 25)",
+    "message": "replace",
+    "params": "((\"hello.py\" 25) record (text ((\"hello.py\" 25) literal (string \"Hi\"))))"
+   },
+   {
+    "action": "message",
+    "id": "((\"hello.py\" 21) static_id 0)",
+    "line_no": "(\"hello.py\" 26)",
+    "message": "append",
+    "params": "((\"hello.py\" 26) record (text ((\"hello.py\" 26) literal (string \", there!\"))))"
+   },
+   {
+    "action": "verify",
+    "condition": "((\"hello.py\" 27) eq ((\"hello.py\" 27) attr ((\"hello.py\" 26) contract_data ((\"hello.py\" 21) static_id 0)) \"text\") ((\"hello.py\" 27) literal (string \"Hi, there!\")))",
+    "line_no": "(\"hello.py\" 27)"
+   }
+  ],
+  "kind": "test"
+ },
+ {
+  "shortname": "storeText",
+  "longname": "storeText",
+  "scenario": [
+   {
+    "action": "newContract",
+    "accept_unknown_types": false,
+    "export": "(template_id ((\"\" -1) static_id 0) \nstorage ((\"hello.py\" 7) record (text ((\"hello.py\" 7) literal (string \"Hello, there\"))))\nstorage_type (())\nentry_points ((append True None None None True (\"hello.py\" 14) (((\"hello.py\" 15) set ((\"hello.py\" 15) attr ((\"\" -1) data) \"text\") ((\"hello.py\" 15) add ((\"hello.py\" 15) attr ((\"\" -1) data) \"text\") ((\"hello.py\" 15) attr ((\"hello.py\" 14) params) \"text\"))))) (replace True None None None True (\"hello.py\" 10) (((\"hello.py\" 11) set ((\"hello.py\" 15) attr ((\"\" -1) data) \"text\") ((\"hello.py\" 11) attr ((\"hello.py\" 10) params) \"text\")))))\nflags ()\nprivates ()\nviews ()\nentry_points_layout ()\ninitial_metadata ()\nbalance ())",
+    "id": "((\"\" -1) static_id 0)",
+    "line_no": "(\"\" -1)",
+    "show": true
+   }
+  ],
+  "kind": "compilation"
+ }
+]

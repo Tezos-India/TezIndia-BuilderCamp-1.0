@@ -8,6 +8,12 @@ The contract is composed of two smart contracts:
 - `Pokemon`: an FA2-compatible smart contract that implements the minting and transfer of Pokemon NFTs.
 - `PokemonMarketplace`: a marketplace smart contract that allows users to buy and sell Pokemon NFTs.
 
+<<<<<<< HEAD
+Go to folder Week 2
+Go to foler Pod 1
+Create folder Simarpreet Singha
+upload my assignment files as Smartpy_project 
+=======
 The `PokemonMarketplace` contract relies on the `Pokemon` contract to handle the minting and transfer of NFTs.
 
 ## Contract Usage
@@ -32,4 +38,5 @@ To update the admin of the `PokemonMarketplace` contract, call the `update_admin
 To withdraw funds from the contract, call the `withdraw` entry point with the following parameters:
 - `amount`: the amount of tez to withdraw.
 - `address`: the address to send the funds to.
+>>>>>>> 07a6c5308b516e5f9f0addc7dda623e2d54c2920
 

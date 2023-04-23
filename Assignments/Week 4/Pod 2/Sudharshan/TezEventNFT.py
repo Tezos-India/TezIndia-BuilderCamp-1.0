@@ -28,7 +28,7 @@ class TezEventNFT(sp.Contract):
     @sp.entry_point
     def transfer(self, params):
         sp.verify(self.data.ledger[sp.sender].balance >= params.amount, message="Insufficient balance")
-        sp.verify(self.data.ledger.contains(params.to_), message="Recipient does not have a business card")
+        sp.verify(self.data.ledger.contains(params.to_), message="Recipient does not have a event ticket")
     
         self.data.ledger[sp.sender].balance = sp.as_nat(self.data.ledger[sp.sender].balance - params.amount)
         self.data.ledger[params.to_].balance += params.amount

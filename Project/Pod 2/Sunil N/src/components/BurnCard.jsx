@@ -5,7 +5,7 @@ export default function BurnCard(props) {
     const [amount, setAmount] = useState("");
   
     return (
-      <div className="flex">
+      <div >
         <input
           type="number"
           name="amount"

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../index.css";
 import {
   connectWallet,
@@ -34,24 +35,24 @@ export default function Navbar() {
         <a href="#!" className="font-bold text-white pr-6">
          Business Card NFT APP
         </a>
-        <a
-          href="#mint"
+        <Link
+          to="/mint"
           className="bg-black text-gray-200 px-4 py-2 text-sm font-semibold rounded-sm"
         >
           Mint
-        </a>
-        <a
-          href="#burn"
+        </Link>
+        <Link
+          to="/burn"
           className="bg-black text-gray-200 px-4 py-2 text-sm font-semibold rounded-sm"
         >
           Burn
-        </a>
-        <a
-          href="#burn"
+        </Link>
+        <Link
+          to="/transfer"
           className="bg-black text-gray-200 px-4 py-2 text-sm font-semibold rounded-sm"
         >
           Transfer
-        </a>
+        </Link>
       </div>
       <div>
         <button

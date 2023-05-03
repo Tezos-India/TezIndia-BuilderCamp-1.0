@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import img1 from '../images/2.jpg'
-import img2 from '../images/3.jpg'
+import img1 from '../2.jpg'
+import img2 from '../3.jpg'
 
 const Blogs = () => {
 return (

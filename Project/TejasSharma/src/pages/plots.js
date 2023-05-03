@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import img1 from '../images/2.jpg'
+import img2 from '../images/3.jpg'
 
 const Blogs = () => {
 return (
@@ -8,7 +10,7 @@ return (
 	<div className='row'>
 		<div className='col-md-4'>
 			<Card style={{ width: '18rem' }}>
-			<Card.Img variant="top" src="/home/tejas/Desktop/Dev/Blockchain/TezAsia/FinalProject/Frontend/final/public/logo512.png" />
+			<Card.Img variant="top" src={img2} width={350} height={250} />
 			<Card.Body>
 				<Card.Title>ValmarkA102</Card.Title>
 				<Card.Text>
@@ -19,7 +21,7 @@ return (
 		</div>
 		<div className='col-md-4'>
 			<Card style={{ width: '18rem' }}>
-			<Card.Img variant="top" src="/home/tejas/Desktop/Dev/Blockchain/TezAsia/FinalProject/Frontend/final/public/logo512.png" />
+			<Card.Img variant="top" src={img1} width={350} height={250}/>
 			<Card.Body>
 				<Card.Title>ValmarkA101</Card.Title>
 				<Card.Text>

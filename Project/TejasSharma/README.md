@@ -20,5 +20,6 @@ Taquito - Integrating the frontend and smart contract
 
 **How to use** - 
 Clone the repo
-run npm install in the working directory
-run - npm start to run the program
+run _npm install_ in the working directory
+
+run - _npm start_ to run the program

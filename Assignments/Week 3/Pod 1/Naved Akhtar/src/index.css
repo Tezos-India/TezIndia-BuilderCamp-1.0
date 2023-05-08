@@ -1,0 +1,8 @@
+#root,
+html,
+body {
+  height: 100%;
+}
+.box{
+  margin-top: 100px;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "array",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroicons/react": "^1.0.6",
+    "autoprefixer": "10.4.14",
+    "framer-motion": "^10.11.5",
+    "material-icons": "^1.13.4",
+    "next": "13.3.0",
+    "postcss": "8.4.21",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.3.1"
+  }
+}
